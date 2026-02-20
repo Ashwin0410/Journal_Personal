@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal ✿</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FFF8F2;
+  --bg-warm: #FEF0E4;
+  --bg-blush: #FDE8E0;
+  --bg-lavender: #F0E6F6;
+  --bg-mint: #E6F4ED;
+  --bg-butter: #FFF6D6;
+  --bg-sky: #E4EEF8;
+  --card: #FFFFFF;
+  --card-hover: #FFFAF6;
+  --text: #3D2C2C;
+  --text-soft: #6B5656;
+  --text-muted: #A08B8B;
+  --peach: #F4845F;
+  --peach-light: #F9A07C;
+  --peach-glow: rgba(244, 132, 95, 0.12);
+  --rose: #E8728A;
+  --rose-glow: rgba(232, 114, 138, 0.12);
+  --lilac: #B08DCB;
+  --lilac-glow: rgba(176, 141, 203, 0.12);
+  --mint: #6BBF8A;
+  --mint-glow: rgba(107, 191, 138, 0.12);
+  --honey: #E8A838;
+  --honey-glow: rgba(232, 168, 56, 0.12);
+  --sky: #6BAED6;
+  --sky-glow: rgba(107, 174, 214, 0.12);
+  --coral: #E87272;
+  --coral-glow: rgba(232, 114, 114, 0.12);
+  --border: rgba(61, 44, 44, 0.06);
+  --shadow-sm: 0 2px 8px rgba(61, 44, 44, 0.04), 0 1px 2px rgba(61, 44, 44, 0.03);
+  --shadow-md: 0 4px 20px rgba(61, 44, 44, 0.06), 0 2px 6px rgba(61, 44, 44, 0.04);
+  --shadow-lg: 0 8px 40px rgba(61, 44, 44, 0.08), 0 2px 8px rgba(61, 44, 44, 0.04);
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-sm: 10px;
+  --radius-pill: 50px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { font-size: 16px; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 20% 20%, rgba(244, 132, 95, 0.04) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(176, 141, 203, 0.04) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(107, 191, 138, 0.03) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
+input, textarea, select, button { font-family: inherit; font-size: inherit; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+.auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; z-index: 1; background: radial-gradient(ellipse at 30% 0%, rgba(244, 132, 95, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 100%, rgba(176, 141, 203, 0.08) 0%, transparent 60%), var(--bg); }
+.auth-card { background: var(--card); border-radius: var(--radius-lg); padding: 48px 40px; width: 100%; max-width: 440px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; border: 1px solid var(--border); }
+.auth-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--peach), var(--rose), var(--lilac), var(--mint)); border-radius: 5px 5px 0 0; }
+.auth-card::after { content: '✿'; position: absolute; top: 20px; right: 24px; font-size: 2rem; opacity: 0.15; }
+.auth-title { font-size: 2.6rem; color: var(--text); margin-bottom: 4px; letter-spacing: -0.02em; }
+.auth-title span { color: var(--peach); }
+.auth-subtitle { color: var(--text-muted); font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; margin-bottom: 36px; font-weight: 400; }
+.form-group { margin-bottom: 22px; }
+.form-label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+.form-input { width: 100%; padding: 14px 18px; border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 1rem; transition: all var(--transition); outline: none; }
+.form-input::placeholder { color: var(--text-muted); opacity: 0.6; }
+.form-input:focus { border-color: var(--peach); background: white; box-shadow: 0 0 0 4px var(--peach-glow); }
+.btn-primary { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--peach), var(--peach-light)); color: white; border: none; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 700; cursor: pointer; transition: all var(--transition); margin-top: 8px; box-shadow: 0 4px 16px rgba(244, 132, 95, 0.25); letter-spacing: 0.02em; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(244, 132, 95, 0.3); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.auth-switch { text-align: center; margin-top: 28px; font-size: 0.9rem; color: var(--text-muted); }
+.auth-switch button { background: none; border: none; color: var(--peach); font-weight: 700; cursor: pointer; border-bottom: 2px dotted var(--peach-glow); padding-bottom: 1px; transition: color var(--transition); }
+.auth-switch button:hover { color: var(--rose); }
+.error-msg { background: var(--coral-glow); color: var(--coral); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.88rem; font-weight: 600; margin-bottom: 16px; border: 1px solid rgba(232, 114, 114, 0.15); }
+
+.app-layout { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+.sidebar { width: 260px; background: var(--card); border-right: 1px solid var(--border); padding: 28px 18px; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.sidebar-brand { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; color: var(--text); padding: 10px 14px 28px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 6px; }
+.sidebar-brand span { color: var(--peach); }
+.sidebar-brand .brand-flower { font-style: normal; font-family: sans-serif; font-size: 1.4rem; opacity: 0.6; }
+.nav-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-sm); color: var(--text-soft); font-size: 0.94rem; font-weight: 600; cursor: pointer; transition: all var(--transition); border: none; background: none; width: 100%; text-align: left; margin-bottom: 4px; }
+.nav-item:hover { background: var(--bg-warm); color: var(--text); }
+.nav-item.active { background: linear-gradient(135deg, var(--peach-glow), var(--rose-glow)); color: var(--peach); }
+.nav-icon { font-size: 1.25rem; width: 26px; text-align: center; }
+.sidebar-footer { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--border); }
+.user-info { display: flex; align-items: center; gap: 12px; padding: 10px 14px; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--peach), var(--rose)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 8px rgba(244, 132, 95, 0.2); }
+.user-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+.btn-logout { background: none; border: none; color: var(--text-muted); font-size: 0.82rem; font-weight: 600; cursor: pointer; padding: 8px 14px; width: 100%; text-align: left; border-radius: var(--radius-sm); transition: all var(--transition); }
+.btn-logout:hover { background: var(--bg-warm); color: var(--peach); }
+
+.main-content { flex: 1; margin-left: 260px; padding: 36px 44px; max-width: 920px; }
+.mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 58px; background: rgba(255, 248, 242, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 18px; align-items: center; justify-content: space-between; z-index: 90; }
+.mobile-header .sidebar-brand { padding: 0; font-size: 1.5rem; }
+.hamburger { background: none; border: none; font-size: 1.5rem; color: var(--text); cursor: pointer; padding: 4px; width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; transition: background var(--transition); }
+.hamburger:hover { background: var(--bg-warm); }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(61, 44, 44, 0.15); backdrop-filter: blur(2px); z-index: 99; }
+
+.page-header { margin-bottom: 32px; }
+.page-title { font-size: 2.2rem; letter-spacing: -0.02em; color: var(--text); margin-bottom: 4px; }
+.page-date { font-family: 'Playfair Display', serif; font-style: italic; color: var(--text-muted); font-size: 1.05rem; font-weight: 400; }
+
+.greeting-card { background: linear-gradient(135deg, var(--bg-blush), var(--bg-lavender), var(--bg-butter)); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 28px; position: relative; overflow: hidden; border: 1px solid rgba(244, 132, 95, 0.08); }
+.greeting-card::after { content: ''; position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(244, 132, 95, 0.08) 0%, transparent 70%); border-radius: 50%; }
+.greeting-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 500; color: var(--text); line-height: 1.4; }
+.greeting-sub { color: var(--text-soft); font-size: 0.92rem; margin-top: 6px; }
+
+.add-entry-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+.add-btn { display: flex; align-items: center; gap: 8px; padding: 11px 20px; border: 2px dashed var(--border); border-radius: var(--radius-pill); background: var(--card); color: var(--text-soft); font-size: 0.86rem; font-weight: 600; cursor: pointer; transition: all var(--transition); box-shadow: var(--shadow-sm); }
+.add-btn:hover { border-color: var(--peach); color: var(--peach); background: var(--peach-glow); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.add-btn .add-icon { font-size: 1.15rem; }
+
+.entry-form-card { background: var(--card); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-md); border: 1px solid var(--border); animation: floatIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes floatIn { from { opacity: 0; transform: translateY(-12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.entry-form-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.entry-form-type { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text); }
+.btn-cancel { background: var(--bg); border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+.btn-cancel:hover { background: var(--coral-glow); color: var(--coral); }
+.entry-form-card textarea { width: 100%; min-height: 110px; padding: 16px 18px; border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); resize: vertical; font-size: 0.95rem; line-height: 1.7; outline: none; transition: all var(--transition); }
+.entry-form-card textarea::placeholder { color: var(--text-muted); opacity: 0.6; }
+.entry-form-card textarea:focus { border-color: var(--peach); background: white; box-shadow: 0 0 0 4px var(--peach-glow); }
+.entry-form-card input[type="file"] { margin: 12px 0; font-size: 0.88rem; color: var(--text-soft); }
+.media-preview { margin: 14px 0; border-radius: var(--radius); overflow: hidden; }
+.media-preview img, .media-preview video { max-width: 100%; max-height: 300px; border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.media-preview audio { width: 100%; margin: 10px 0; }
+.btn-save { padding: 12px 32px; background: linear-gradient(135deg, var(--peach), var(--peach-light)); color: white; border: none; border-radius: var(--radius-pill); font-weight: 700; cursor: pointer; margin-top: 14px; transition: all var(--transition); box-shadow: 0 4px 16px rgba(244, 132, 95, 0.2); letter-spacing: 0.02em; }
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(244, 132, 95, 0.3); }
+.btn-save:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.mood-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 14px; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.mood-selector { display: flex; gap: 8px; flex-wrap: wrap; }
+.mood-option { padding: 7px 16px; border: 2px solid var(--border); border-radius: var(--radius-pill); background: var(--card); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all var(--transition); }
+.mood-option:hover { border-color: var(--honey); transform: translateY(-1px); }
+.mood-option.selected { background: var(--honey-glow); border-color: var(--honey); color: var(--honey); font-weight: 700; box-shadow: 0 2px 8px rgba(232, 168, 56, 0.15); }
+
+.timeline { position: relative; }
+.timeline::before { content: ''; position: absolute; left: 16px; top: 8px; bottom: 8px; width: 2.5px; background: linear-gradient(to bottom, var(--bg-blush), var(--bg-lavender), var(--bg-mint)); border-radius: 2px; }
+.entry-card { position: relative; margin-left: 48px; margin-bottom: 20px; background: var(--card); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: all var(--transition); animation: cardIn 0.3s ease; }
+@keyframes cardIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+.entry-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.entry-dot { position: absolute; left: -38px; top: 24px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--card); box-shadow: 0 0 0 2px var(--border); transition: transform var(--transition); }
+.entry-card:hover .entry-dot { transform: scale(1.2); }
+.entry-dot.text { background: var(--text-muted); }
+.entry-dot.image { background: var(--sky); }
+.entry-dot.voice { background: var(--lilac); }
+.entry-dot.video { background: var(--rose); }
+.entry-dot.task { background: var(--mint); }
+.entry-dot.gratitude { background: var(--honey); }
+.entry-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.entry-type-badge { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 4px 12px; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px; }
+.entry-type-badge.text { background: var(--bg); color: var(--text-muted); }
+.entry-type-badge.image { background: var(--sky-glow); color: var(--sky); }
+.entry-type-badge.voice { background: var(--lilac-glow); color: var(--lilac); }
+.entry-type-badge.video { background: var(--rose-glow); color: var(--rose); }
+.entry-type-badge.task { background: var(--mint-glow); color: var(--mint); }
+.entry-type-badge.gratitude { background: var(--honey-glow); color: var(--honey); }
+.entry-time { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+.entry-content { font-size: 0.95rem; line-height: 1.75; color: var(--text-soft); white-space: pre-wrap; }
+.entry-content img, .entry-content video { max-width: 100%; border-radius: var(--radius); margin-top: 10px; box-shadow: var(--shadow-sm); }
+.entry-content audio { width: 100%; margin-top: 10px; }
+.entry-mood { display: inline-block; margin-top: 12px; font-size: 0.82rem; color: var(--honey); background: var(--honey-glow); padding: 4px 12px; border-radius: var(--radius-pill); font-weight: 600; }
+.entry-actions { display: flex; gap: 8px; margin-top: 14px; opacity: 0; transition: opacity var(--transition); }
+.entry-card:hover .entry-actions { opacity: 1; }
+.entry-action-btn { background: var(--bg); border: none; color: var(--text-muted); cursor: pointer; font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-pill); transition: all var(--transition); }
+.entry-action-btn:hover { background: var(--coral-glow); color: var(--coral); }
+
+.task-check { display: flex; align-items: flex-start; gap: 14px; }
+.task-checkbox { width: 24px; height: 24px; border-radius: 8px; border: 2.5px solid var(--mint); background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all var(--transition); font-size: 0.85rem; color: white; }
+.task-checkbox:hover { background: var(--mint-glow); }
+.task-checkbox.done { background: var(--mint); border-color: var(--mint); box-shadow: 0 2px 6px var(--mint-glow); }
+.task-text.done { text-decoration: line-through; color: var(--text-muted); }
+
+.calendar-wrapper { background: var(--card); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border); margin-bottom: 28px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-header { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); text-align: center; padding: 10px 0; }
+.cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all var(--transition); position: relative; background: none; border: none; color: var(--text); }
+.cal-day:hover { background: var(--bg-warm); }
+.cal-day.today { font-weight: 700; color: var(--peach); background: var(--peach-glow); }
+.cal-day.selected { background: linear-gradient(135deg, var(--peach), var(--peach-light)); color: white; font-weight: 700; box-shadow: 0 2px 8px rgba(244, 132, 95, 0.2); }
+.cal-day.other-month { color: var(--text-muted); opacity: 0.3; }
+.cal-day.has-entry::after { content: ''; position: absolute; bottom: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--peach); }
+.cal-day.selected.has-entry::after { background: white; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.cal-nav-btn { background: var(--bg); border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-soft); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+.cal-nav-btn:hover { background: var(--bg-warm); color: var(--peach); }
+.cal-month-label { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+
+.memory-card { background: linear-gradient(135deg, var(--bg-butter), var(--bg-blush), var(--bg-lavender)); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 20px; border: 1px solid rgba(232, 168, 56, 0.12); position: relative; overflow: hidden; }
+.memory-card::after { content: '✦'; position: absolute; top: 16px; right: 20px; font-size: 1.5rem; opacity: 0.12; color: var(--honey); }
+.memory-year { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--honey); margin-bottom: 14px; display: flex; align-items: baseline; gap: 10px; }
+.memory-year span { font-size: 0.82rem; font-weight: 500; color: var(--text-muted); font-family: 'Nunito', sans-serif; background: rgba(255,255,255,0.5); padding: 2px 10px; border-radius: var(--radius-pill); }
+.memory-entry { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; }
+
+.empty-state { text-align: center; padding: 64px 24px; color: var(--text-muted); }
+.empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 18px; filter: grayscale(0.3); }
+.empty-state p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.15rem; font-weight: 400; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+
+.loading { display: flex; align-items: center; justify-content: center; padding: 48px; color: var(--text-muted); font-weight: 500; }
+.spinner { width: 22px; height: 22px; border: 3px solid var(--bg-warm); border-top-color: var(--peach); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); width: 280px; }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .sidebar-overlay.open { display: block; }
+  .mobile-header { display: flex; }
+  .main-content { margin-left: 0; padding: 74px 18px 36px; }
+  .add-entry-bar { gap: 8px; }
+  .add-btn { padding: 9px 14px; font-size: 0.82rem; }
+  .entry-card { margin-left: 40px; padding: 18px; }
+  .timeline::before { left: 14px; }
+  .entry-dot { left: -33px; }
+  .page-title { font-size: 1.8rem; }
+  .auth-card { padding: 36px 28px; }
+  .greeting-card { padding: 22px 24px; }
+  .greeting-text { font-size: 1.3rem; }
+  .calendar-wrapper { padding: 20px; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef, useMemo } = React;
+
+const API = (() => {
+  let token = localStorage.getItem('journal_token');
+  const headers = () => {
+    const h = { 'Content-Type': 'application/json' };
+    if (token) h['Authorization'] = `Bearer ${token}`;
+    return h;
+  };
+  const request = async (method, path, body) => {
+    const opts = { method, headers: headers() };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(`/api${path}`, opts);
+    if (res.status === 401) { token = null; localStorage.removeItem('journal_token'); localStorage.removeItem('journal_user'); window.location.reload(); return; }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Request failed');
+    return data;
+  };
+  return {
+    setToken: (t) => { token = t; localStorage.setItem('journal_token', t); },
+    clearToken: () => { token = null; localStorage.removeItem('journal_token'); localStorage.removeItem('journal_user'); },
+    get: (path) => request('GET', path),
+    post: (path, body) => request('POST', path, body),
+    put: (path, body) => request('PUT', path, body),
+    del: (path) => request('DELETE', path),
+    hasToken: () => !!token,
+  };
+})();
+
+const MOODS = ['😊 Happy', '😌 Calm', '😔 Sad', '😤 Frustrated', '🥰 Loved', '😴 Sleepy', '🤔 Thoughtful', '⚡ Energized', '🌸 Peaceful', '🎉 Excited'];
+const ENTRY_TYPES = [
+  { type: 'text', icon: '✏️', label: 'Note' },
+  { type: 'image', icon: '📷', label: 'Photo' },
+  { type: 'voice', icon: '🎤', label: 'Voice' },
+  { type: 'video', icon: '🎬', label: 'Video' },
+  { type: 'task', icon: '✅', label: 'To-do' },
+  { type: 'gratitude', icon: '🌻', label: 'Gratitude' },
+];
+
+const formatDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+const formatTime = (dt) => new Date(dt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+const toDateStr = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const todayStr = () => toDateStr(new Date());
+const timeAgo = (dateStr) => {
+  const d = new Date(dateStr + 'T00:00:00'), now = new Date();
+  const years = now.getFullYear() - d.getFullYear();
+  const months = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
+  if (years >= 1) return `${years} year${years > 1 ? 's' : ''} ago`;
+  if (months >= 1) return `${months} month${months > 1 ? 's' : ''} ago`;
+  return 'recently';
+};
+const getGreeting = () => {
+  const h = new Date().getHours();
+  if (h < 5) return { text: 'Late night thoughts?', sub: 'The quiet hours are for the deepest reflections' };
+  if (h < 12) return { text: 'Good morning, sunshine', sub: 'A new page awaits your story today' };
+  if (h < 17) return { text: 'Good afternoon', sub: 'How is your day unfolding?' };
+  if (h < 21) return { text: 'Good evening', sub: 'Time to pause and reflect on your day' };
+  return { text: 'Goodnight', sub: 'Capture the day before it slips away' };
+};
+const fileToBase64 = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result.split(',')[1]);
+  reader.onerror = reject;
+  reader.readAsDataURL(file);
+});
+
+function AuthPage({ onLogin }) {
+  const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); setError(''); setLoading(true);
+    try {
+      const endpoint = isRegister ? '/auth/register' : '/auth/login';
+      const body = isRegister ? { email, name, password } : { email, password };
+      const data = await API.post(endpoint, body);
+      API.setToken(data.access_token);
+      localStorage.setItem('journal_user', JSON.stringify(data.user));
+      onLogin(data.user);
+    } catch (err) { setError(err.message); } finally { setLoading(false); }
+  };
+
+  return (
+    <div className="auth-page">
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h1 className="auth-title">Journal<span>.</span></h1>
+        <p className="auth-subtitle">{isRegister ? 'Begin your beautiful story' : 'Welcome back, lovely'}</p>
+        {error && <div className="error-msg">{error}</div>}
+        {isRegister && <div className="form-group"><label className="form-label">Your Name</label><input className="form-input" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="What should we call you?" required /></div>}
+        <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="hello@example.com" required /></div>
+        <div className="form-group"><label className="form-label">Password</label><input className="form-input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required minLength={6} /></div>
+        <button className="btn-primary" type="submit" disabled={loading}>{loading ? 'One moment...' : (isRegister ? 'Start Journaling' : 'Welcome Back')}</button>
+        <div className="auth-switch">
+          {isRegister ? 'Already have an account? ' : 'New here? '}
+          <button type="button" onClick={() => { setIsRegister(!isRegister); setError(''); }}>{isRegister ? 'Sign in' : 'Create account'}</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function EntryForm({ type, date, onSave, onCancel }) {
+  const [content, setContent] = useState('');
+  const [mood, setMood] = useState('');
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const textRef = useRef(null);
+  const typeInfo = ENTRY_TYPES.find(t => t.type === type);
+
+  useEffect(() => { if (textRef.current) textRef.current.focus(); }, []);
+
+  const handleFileChange = (e) => { const file = e.target.files[0]; if (!file) return; setMediaFile(file); setMediaPreview(URL.createObjectURL(file)); };
+  const handleSave = async () => {
+    if (!content && !mediaFile && type !== 'task') return;
+    setSaving(true);
+    try {
+      let media_base64 = null, media_mime = null;
+      if (mediaFile) { media_base64 = await fileToBase64(mediaFile); media_mime = mediaFile.type; }
+      await onSave({ entry_type: type, content, media_base64, media_mime, mood: mood || null, is_completed: false, entry_date: date });
+      onCancel();
+    } catch (err) { alert('Failed to save: ' + err.message); } finally { setSaving(false); }
+  };
+
+  const needsMedia = ['image', 'voice', 'video'].includes(type);
+  const acceptMap = { image: 'image/*', voice: 'audio/*', video: 'video/*' };
+  const placeholders = { text: "What's on your mind today?", task: "What do you want to get done?", gratitude: "What made you smile today?", image: "Describe this moment...", voice: "What's this about?", video: "Tell the story behind this..." };
+
+  return (
+    <div className="entry-form-card">
+      <div className="entry-form-header">
+        <div className="entry-form-type">{typeInfo.icon} {type === 'gratitude' ? 'Grateful for...' : `New ${typeInfo.label}`}</div>
+        <button className="btn-cancel" onClick={onCancel}>×</button>
+      </div>
+      <textarea ref={textRef} value={content} onChange={e => setContent(e.target.value)} placeholder={placeholders[type] || "Write something..."} rows={type === 'text' || type === 'gratitude' ? 5 : 2} />
+      {needsMedia && (<><input type="file" accept={acceptMap[type]} onChange={handleFileChange} />{mediaPreview && <div className="media-preview">{type === 'image' && <img src={mediaPreview} alt="Preview" />}{type === 'voice' && <audio src={mediaPreview} controls />}{type === 'video' && <video src={mediaPreview} controls style={{maxHeight: 250}} />}</div>}</>)}
+      {(type === 'text' || type === 'gratitude') && (<><div className="mood-label">How are you feeling?</div><div className="mood-selector">{MOODS.map(m => <button key={m} className={`mood-option ${mood === m ? 'selected' : ''}`} onClick={() => setMood(mood === m ? '' : m)} type="button">{m}</button>)}</div></>)}
+      <button className="btn-save" onClick={handleSave} disabled={saving || (!content && !mediaFile)}>{saving ? 'Saving...' : 'Save'}</button>
+    </div>
+  );
+}
+
+function EntryCard({ entry, onToggleTask, onDelete }) {
+  const renderMedia = () => {
+    if (!entry.media_base64 || !entry.media_mime) return null;
+    const src = `data:${entry.media_mime};base64,${entry.media_base64}`;
+    if (entry.media_mime.startsWith('image/')) return <img src={src} alt="" />;
+    if (entry.media_mime.startsWith('audio/')) return <audio src={src} controls />;
+    if (entry.media_mime.startsWith('video/')) return <video src={src} controls style={{maxHeight: 300}} />;
+    return null;
+  };
+  return (
+    <div className="entry-card">
+      <div className={`entry-dot ${entry.entry_type}`} />
+      <div className="entry-header">
+        <span className={`entry-type-badge ${entry.entry_type}`}>{ENTRY_TYPES.find(t => t.type === entry.entry_type)?.icon} {entry.entry_type}</span>
+        <span className="entry-time">{formatTime(entry.created_at)}</span>
+      </div>
+      {entry.entry_type === 'task' ? (
+        <div className="task-check">
+          <button className={`task-checkbox ${entry.is_completed ? 'done' : ''}`} onClick={() => onToggleTask(entry.id, !entry.is_completed)}>{entry.is_completed ? '✓' : ''}</button>
+          <span className={`entry-content task-text ${entry.is_completed ? 'done' : ''}`}>{entry.content}</span>
+        </div>
+      ) : (
+        <div className="entry-content">{entry.entry_type === 'gratitude' && <span style={{marginRight: 6}}>🌻</span>}{entry.content}{renderMedia()}</div>
+      )}
+      {entry.mood && <div className="entry-mood">{entry.mood}</div>}
+      <div className="entry-actions"><button className="entry-action-btn" onClick={() => onDelete(entry.id)}>Delete</button></div>
+    </div>
+  );
+}
+
+function TodayView({ userName }) {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeForm, setActiveForm] = useState(null);
+  const today = todayStr();
+  const greeting = useMemo(() => getGreeting(), []);
+
+  const loadEntries = useCallback(async () => { setLoading(true); try { setEntries(await API.get(`/entries?entry_date=${today}`)); } catch(e) { console.error(e); } setLoading(false); }, [today]);
+  useEffect(() => { loadEntries(); }, [loadEntries]);
+
+  const handleSave = async (data) => { await API.post('/entries', data); loadEntries(); };
+  const handleToggleTask = async (id, done) => { await API.put(`/entries/${id}`, { is_completed: done }); loadEntries(); };
+  const handleDelete = async (id) => { if (confirm('Delete this entry?')) { await API.del(`/entries/${id}`); loadEntries(); } };
+
+  return (
+    <div>
+      <div className="greeting-card">
+        <div className="greeting-text">{greeting.text}{userName ? `, ${userName.split(' ')[0]}` : ''} ✿</div>
+        <div className="greeting-sub">{greeting.sub}</div>
+      </div>
+      <div className="page-header"><h1 className="page-title">Today</h1><div className="page-date">{formatDate(today)}</div></div>
+      <div className="add-entry-bar">{ENTRY_TYPES.map(({ type, icon, label }) => <button key={type} className="add-btn" onClick={() => setActiveForm(type)}><span className="add-icon">{icon}</span> {label}</button>)}</div>
+      {activeForm && <EntryForm type={activeForm} date={today} onSave={handleSave} onCancel={() => setActiveForm(null)} />}
+      {loading ? <div className="loading"><div className="spinner" /> Loading your day...</div>
+      : entries.length === 0 ? <div className="empty-state"><div className="empty-icon">🌿</div><p>Your story for today begins here. Add your first entry above.</p></div>
+      : <div className="timeline">{entries.map(entry => <EntryCard key={entry.id} entry={entry} onToggleTask={handleToggleTask} onDelete={handleDelete} />)}</div>}
+    </div>
+  );
+}
+
+function CalendarView() {
+  const [viewDate, setViewDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [datesWithEntries, setDatesWithEntries] = useState(new Set());
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [activeForm, setActiveForm] = useState(null);
+
+  const year = viewDate.getFullYear(), month = viewDate.getMonth();
+
+  useEffect(() => { API.get(`/entries/dates-with-entries?month=${month+1}&year=${year}`).then(d => setDatesWithEntries(new Set(d))).catch(console.error); }, [month, year]);
+
+  const loadDayEntries = useCallback(async (ds) => { setLoading(true); try { setEntries(await API.get(`/entries?entry_date=${ds}`)); } catch(e) { console.error(e); } setLoading(false); }, []);
+  useEffect(() => { if (selectedDate) loadDayEntries(selectedDate); }, [selectedDate, loadDayEntries]);
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrev = new Date(year, month, 0).getDate();
+  const todayS = todayStr();
+
+  const calDays = [];
+  for (let i = firstDay - 1; i >= 0; i--) calDays.push({ day: daysInPrev - i, current: false });
+  for (let d = 1; d <= daysInMonth; d++) { const ds = toDateStr(new Date(year, month, d)); calDays.push({ day: d, current: true, dateStr: ds, isToday: ds === todayS, hasEntry: datesWithEntries.has(ds) }); }
+  const remaining = 42 - calDays.length;
+  for (let d = 1; d <= remaining; d++) calDays.push({ day: d, current: false });
+
+  const monthLabel = viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  const handleSave = async (data) => { await API.post('/entries', data); loadDayEntries(selectedDate); API.get(`/entries/dates-with-entries?month=${month+1}&year=${year}`).then(d => setDatesWithEntries(new Set(d))); };
+  const handleToggleTask = async (id, done) => { await API.put(`/entries/${id}`, { is_completed: done }); loadDayEntries(selectedDate); };
+  const handleDelete = async (id) => { if (confirm('Delete this entry?')) { await API.del(`/entries/${id}`); loadDayEntries(selectedDate); } };
+
+  return (
+    <div>
+      <div className="page-header"><h1 className="page-title">Calendar</h1><div className="page-date">Browse your past entries</div></div>
+      <div className="calendar-wrapper">
+        <div className="cal-nav">
+          <button className="cal-nav-btn" onClick={() => setViewDate(new Date(year, month-1, 1))}>‹</button>
+          <span className="cal-month-label">{monthLabel}</span>
+          <button className="cal-nav-btn" onClick={() => setViewDate(new Date(year, month+1, 1))}>›</button>
+        </div>
+        <div className="calendar-grid">
+          {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => <div key={d} className="cal-header">{d}</div>)}
+          {calDays.map((d, i) => <button key={i} className={`cal-day ${!d.current?'other-month':''} ${d.isToday?'today':''} ${selectedDate===d.dateStr?'selected':''} ${d.hasEntry?'has-entry':''}`} onClick={() => d.current && setSelectedDate(d.dateStr)} disabled={!d.current}>{d.day}</button>)}
+        </div>
+      </div>
+      {selectedDate && (<>
+        <div style={{marginBottom: 20}}><h2 style={{fontFamily: "'Playfair Display', serif", fontSize: '1.4rem'}}>{formatDate(selectedDate)}</h2></div>
+        <div className="add-entry-bar">{ENTRY_TYPES.map(({ type, icon, label }) => <button key={type} className="add-btn" onClick={() => setActiveForm(type)}><span className="add-icon">{icon}</span> {label}</button>)}</div>
+        {activeForm && <EntryForm type={activeForm} date={selectedDate} onSave={handleSave} onCancel={() => setActiveForm(null)} />}
+        {loading ? <div className="loading"><div className="spinner" /> Loading...</div>
+        : entries.length === 0 ? <div className="empty-state"><div className="empty-icon">📄</div><p>No entries for this day yet.</p></div>
+        : <div className="timeline">{entries.map(entry => <EntryCard key={entry.id} entry={entry} onToggleTask={handleToggleTask} onDelete={handleDelete} />)}</div>}
+      </>)}
+    </div>
+  );
+}
+
+function OnThisDay() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { API.get('/entries/on-this-day').then(setEntries).catch(console.error).finally(() => setLoading(false)); }, []);
+
+  const grouped = useMemo(() => {
+    const g = {};
+    entries.forEach(e => { if (!g[e.entry_date]) g[e.entry_date] = []; g[e.entry_date].push(e); });
+    return Object.entries(g).sort((a, b) => b[0].localeCompare(a[0]));
+  }, [entries]);
+
+  const todayLabel = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+  return (
+    <div>
+      <div className="page-header"><h1 className="page-title">On This Day</h1><div className="page-date">Your memories from {todayLabel}</div></div>
+      {loading ? <div className="loading"><div className="spinner" /> Finding your memories...</div>
+      : grouped.length === 0 ? <div className="empty-state"><div className="empty-icon">🕰️</div><p>No memories yet for this day. Keep journaling — they'll bloom here with time.</p></div>
+      : grouped.map(([dateStr, dayEntries]) => (
+        <div key={dateStr} className="memory-card">
+          <div className="memory-year">{new Date(dateStr + 'T00:00:00').getFullYear()}<span>{timeAgo(dateStr)}</span></div>
+          {dayEntries.map(entry => (
+            <div key={entry.id} className="memory-entry">
+              <span className={`entry-type-badge ${entry.entry_type}`}>{ENTRY_TYPES.find(t => t.type === entry.entry_type)?.icon}</span>
+              <div>{entry.content && <span style={{color: 'var(--text-soft)', fontSize: '0.95rem', lineHeight: 1.6}}>{entry.content}</span>}{entry.mood && <span className="entry-mood" style={{marginLeft: 8, fontSize: '0.78rem'}}>{entry.mood}</span>}</div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function App() {
+  const [user, setUser] = useState(() => { const s = localStorage.getItem('journal_user'); return s ? JSON.parse(s) : null; });
+  const [currentView, setCurrentView] = useState('today');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  if (!user || !API.hasToken()) return <AuthPage onLogin={u => setUser(u)} />;
+
+  const navItems = [{ id: 'today', icon: '☀️', label: 'Today' }, { id: 'calendar', icon: '📅', label: 'Calendar' }, { id: 'onthisday', icon: '🕰️', label: 'Memories' }];
+
+  return (
+    <div className="app-layout">
+      <div className="mobile-header">
+        <div className="sidebar-brand">Journal<span>.</span></div>
+        <button className="hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}>{sidebarOpen ? '✕' : '☰'}</button>
+      </div>
+      <div className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-brand">Journal<span>.</span><span className="brand-flower">✿</span></div>
+        <nav>{navItems.map(({ id, icon, label }) => <button key={id} className={`nav-item ${currentView === id ? 'active' : ''}`} onClick={() => { setCurrentView(id); setSidebarOpen(false); }}><span className="nav-icon">{icon}</span> {label}</button>)}</nav>
+        <div className="sidebar-footer">
+          <div className="user-info"><div className="user-avatar">{user.name.charAt(0).toUpperCase()}</div><span className="user-name">{user.name}</span></div>
+          <button className="btn-logout" onClick={() => { API.clearToken(); setUser(null); }}>Sign out</button>
+        </div>
+      </aside>
+      <main className="main-content">
+        {currentView === 'today' && <TodayView userName={user.name} />}
+        {currentView === 'calendar' && <CalendarView />}
+        {currentView === 'onthisday' && <OnThisDay />}
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -112,19 +112,51 @@ input,textarea,select,button { font-family: inherit; font-size: inherit; }
 .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(244,132,95,0.3); }
 .btn-save:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* Media toolbar inside note form */
 .media-toolbar { display: flex; gap: 6px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-.media-toolbar button, .media-toolbar label {
-  display: flex; align-items: center; gap: 7px; padding: 9px 16px;
-  border: 1.5px solid var(--border); border-radius: var(--radius-pill);
-  background: var(--bg); color: var(--text-soft); font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; transition: all var(--transition);
-}
-.media-toolbar button:hover, .media-toolbar label:hover { border-color: var(--peach); color: var(--peach); background: var(--peach-glow); }
-.media-toolbar input[type="file"] { display: none; }
+.media-toolbar button { display: flex; align-items: center; gap: 7px; padding: 9px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-pill); background: var(--bg); color: var(--text-soft); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all var(--transition); }
+.media-toolbar button:hover { border-color: var(--peach); color: var(--peach); background: var(--peach-glow); }
 .media-toolbar .rec-btn.recording { border-color: var(--coral); color: var(--coral); background: var(--coral-glow); animation: pulse 1.2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
 .rec-timer { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--coral); font-size: 0.85rem; margin-left: 4px; }
+
+.media-picker-overlay { position: fixed; inset: 0; background: rgba(61,44,44,0.25); backdrop-filter: blur(3px); z-index: 200; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.media-picker-popup { background: var(--card); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-lg); width: 90%; max-width: 360px; text-align: center; }
+.media-picker-popup h3 { font-size: 1.15rem; margin-bottom: 18px; }
+.media-picker-options { display: flex; gap: 12px; justify-content: center; margin-bottom: 14px; }
+.media-picker-options button, .media-picker-options label { flex: 1; padding: 18px 12px; border: 2px solid var(--border); border-radius: var(--radius); background: var(--bg); cursor: pointer; transition: all var(--transition); display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 600; font-size: 0.88rem; color: var(--text-soft); }
+.media-picker-options button:hover, .media-picker-options label:hover { border-color: var(--peach); color: var(--peach); background: var(--peach-glow); transform: translateY(-2px); }
+.media-picker-options .pick-icon { font-size: 1.8rem; }
+.media-picker-options input[type="file"] { display: none; }
+.media-picker-cancel { background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.88rem; padding: 8px 16px; border-radius: var(--radius-pill); transition: all var(--transition); }
+.media-picker-cancel:hover { color: var(--coral); background: var(--coral-glow); }
+
+.camera-view { position: fixed; inset: 0; background: #000; z-index: 300; display: flex; flex-direction: column; }
+.camera-video { flex: 1; object-fit: cover; width: 100%; }
+.camera-controls { padding: 20px; display: flex; align-items: center; justify-content: center; gap: 24px; background: rgba(0,0,0,0.6); }
+.camera-snap { width: 68px; height: 68px; border-radius: 50%; border: 4px solid white; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+.camera-snap:hover { background: rgba(255,255,255,0.4); }
+.camera-snap.recording-vid { background: var(--coral); border-color: var(--coral); }
+.camera-snap-inner { width: 52px; height: 52px; border-radius: 50%; background: white; transition: all 0.15s; }
+.camera-snap.recording-vid .camera-snap-inner { width: 24px; height: 24px; border-radius: 6px; background: white; }
+.camera-close { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 1.3rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.camera-close:hover { background: rgba(255,255,255,0.3); }
+.camera-switch { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 1.2rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.camera-switch:hover { background: rgba(255,255,255,0.3); }
+.camera-timer { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: var(--coral); color: white; padding: 4px 16px; border-radius: var(--radius-pill); font-weight: 700; font-size: 0.9rem; animation: pulse 1.2s infinite; }
+
+/* Install banner */
+.install-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 150; background: var(--card); border-top: 1px solid var(--border); box-shadow: 0 -4px 24px rgba(61,44,44,0.08); padding: 18px 20px; animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1); }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.install-banner-inner { max-width: 600px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+.install-banner-icon { font-size: 2.2rem; flex-shrink: 0; }
+.install-banner-text { flex: 1; }
+.install-banner-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+.install-banner-desc { font-size: 0.82rem; color: var(--text-soft); line-height: 1.5; }
+.install-banner-desc .step-icon { display: inline-block; background: var(--bg); border-radius: 4px; padding: 0 4px; font-size: 1rem; vertical-align: middle; margin: 0 2px; }
+.install-banner-action { flex-shrink: 0; padding: 10px 22px; background: linear-gradient(135deg, var(--peach), var(--peach-light)); color: white; border: none; border-radius: var(--radius-pill); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all var(--transition); box-shadow: 0 2px 10px rgba(244,132,95,0.2); }
+.install-banner-action:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(244,132,95,0.3); }
+.install-banner-close { position: absolute; top: 8px; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 4px; }
 
 .mood-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 14px; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 .mood-selector { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -195,7 +227,8 @@ input,textarea,select,button { font-family: inherit; font-size: inherit; }
   .page-title { font-size: 1.8rem; } .auth-card { padding: 36px 28px; }
   .greeting-card { padding: 22px 24px; } .greeting-text { font-size: 1.3rem; } .calendar-wrapper { padding: 20px; }
   .media-toolbar { flex-wrap: wrap; }
-  .media-toolbar button, .media-toolbar label { padding: 8px 12px; font-size: 0.78rem; }
+  .media-toolbar button { padding: 8px 12px; font-size: 0.78rem; }
+  .install-banner-inner { flex-wrap: wrap; }
 }
 </style>
 </head>
@@ -218,13 +251,8 @@ const API = (() => {
 })();
 
 const MOODS = ['😊 Happy','😌 Calm','😔 Sad','😤 Frustrated','🥰 Loved','😴 Sleepy','🤔 Thoughtful','⚡ Energized','🌸 Peaceful','🎉 Excited'];
-
-// Only 3 top-level entry types now
 const ENTRY_TYPES = [{type:'text',icon:'✏️',label:'Note'},{type:'task',icon:'✅',label:'To-do'},{type:'gratitude',icon:'🌻',label:'Gratitude'}];
-
-// For display, still recognize all types stored in DB
 const ALL_TYPES = [{type:'text',icon:'✏️',label:'note'},{type:'image',icon:'📷',label:'photo'},{type:'voice',icon:'🎤',label:'voice'},{type:'video',icon:'🎬',label:'video'},{type:'task',icon:'✅',label:'to-do'},{type:'gratitude',icon:'🌻',label:'gratitude'}];
-
 const formatDate = d => new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 const formatTime = dt => new Date(dt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 const toDateStr = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -233,6 +261,84 @@ const timeAgo = ds => { const d=new Date(ds+'T00:00:00'),now=new Date(); const y
 const getGreeting = () => { const h=new Date().getHours(); if(h<5) return {text:'Late night thoughts?',sub:'The quiet hours are for the deepest reflections'}; if(h<12) return {text:'Good morning, sunshine',sub:'A new page awaits your story today'}; if(h<17) return {text:'Good afternoon',sub:'How is your day unfolding?'}; if(h<21) return {text:'Good evening',sub:'Time to pause and reflect on your day'}; return {text:'Goodnight',sub:'Capture the day before it slips away'}; };
 const fileToBase64 = file => new Promise((res,rej) => { const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(file); });
 const fmtSec = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+
+/* =============== INSTALL PROMPT =============== */
+function InstallPrompt() {
+  const [show, setShow] = useState(false);
+  const [platform, setPlatform] = useState(null); // 'ios' | 'android' | null
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  useEffect(() => {
+    // Already installed as PWA? Don't show
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+    if (window.navigator.standalone === true) return; // iOS standalone
+    // Already dismissed?
+    if (localStorage.getItem('journal_install_dismissed')) return;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(ua);
+
+    if (isIOS) {
+      // iOS Safari only - check it's Safari (not Chrome/Firefox on iOS which can't install PWAs)
+      const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|OPiOS/.test(ua);
+      if (isSafari) { setPlatform('ios'); setShow(true); }
+    } else {
+      // Android & Desktop: listen for beforeinstallprompt
+      const handler = (e) => { e.preventDefault(); setDeferredPrompt(e); setPlatform('android'); setShow(true); };
+      window.addEventListener('beforeinstallprompt', handler);
+      return () => window.removeEventListener('beforeinstallprompt', handler);
+    }
+  }, []);
+
+  const dismiss = () => {
+    setShow(false);
+    localStorage.setItem('journal_install_dismissed', '1');
+  };
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === 'accepted') dismiss();
+      setDeferredPrompt(null);
+    }
+  };
+
+  if (!show) return null;
+
+  if (platform === 'ios') {
+    return (
+      <div className="install-banner">
+        <button className="install-banner-close" onClick={dismiss}>✕</button>
+        <div className="install-banner-inner">
+          <div className="install-banner-icon">📖</div>
+          <div className="install-banner-text">
+            <div className="install-banner-title">Install Journal App</div>
+            <div className="install-banner-desc">
+              Tap <span className="step-icon">⬆️</span> Share at the bottom of Safari, then tap <strong>"Add to Home Screen"</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Android / Desktop with beforeinstallprompt
+  return (
+    <div className="install-banner">
+      <button className="install-banner-close" onClick={dismiss}>✕</button>
+      <div className="install-banner-inner">
+        <div className="install-banner-icon">📖</div>
+        <div className="install-banner-text">
+          <div className="install-banner-title">Install Journal App</div>
+          <div className="install-banner-desc">Add to your home screen for the full app experience</div>
+        </div>
+        <button className="install-banner-action" onClick={handleInstall}>Install</button>
+      </div>
+    </div>
+  );
+}
 
 function AuthPage({onLogin}) {
   const [isReg,setIsReg]=useState(false); const [email,setEmail]=useState(''); const [name,setName]=useState(''); const [pw,setPw]=useState('');
@@ -253,156 +359,55 @@ function AuthPage({onLogin}) {
 }
 
 function EntryForm({type, date, onSave, onCancel}) {
-  const [content,setContent]=useState('');
-  const [mood,setMood]=useState('');
-  const [mediaFile,setMediaFile]=useState(null);
-  const [mediaPreview,setMediaPreview]=useState(null);
-  const [mediaType,setMediaType]=useState(null);
-  const [saving,setSaving]=useState(false);
-  const [recording,setRecording]=useState(false);
-  const [recSeconds,setRecSeconds]=useState(0);
-  const textRef=useRef(null);
-  const imgRef=useRef(null);
-  const vidRef=useRef(null);
-  const mediaRecRef=useRef(null);
-  const timerRef=useRef(null);
+  const [content, setContent] = useState('');
+  const [mood, setMood] = useState('');
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [mediaType, setMediaType] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [recSeconds, setRecSeconds] = useState(0);
+  const [showPicker, setShowPicker] = useState(null);
+  const [showCamera, setShowCamera] = useState(null);
+  const [camFacing, setCamFacing] = useState('user');
+  const [vidRecording, setVidRecording] = useState(false);
+  const [vidSeconds, setVidSeconds] = useState(0);
+  const textRef=useRef(null); const galleryRef=useRef(null); const mediaRecRef=useRef(null); const timerRef=useRef(null);
+  const camVideoRef=useRef(null); const camStreamRef=useRef(null); const vidRecRef=useRef(null); const vidTimerRef=useRef(null);
+  const typeInfo = ENTRY_TYPES.find(t => t.type === type) || {icon:'✏️',label:'Note'};
+  useEffect(() => { if(textRef.current) textRef.current.focus(); }, []);
+  useEffect(() => { return () => { if(timerRef.current) clearInterval(timerRef.current); if(vidTimerRef.current) clearInterval(vidTimerRef.current); if(mediaRecRef.current&&mediaRecRef.current.state==='recording') mediaRecRef.current.stop(); closeCam(); }; }, []);
 
-  const typeInfo=ENTRY_TYPES.find(t=>t.type===type)||{icon:'✏️',label:'Note'};
-
-  useEffect(()=>{if(textRef.current) textRef.current.focus();},[]);
-
-  // Cleanup on unmount
-  useEffect(()=>{ return ()=>{ if(timerRef.current) clearInterval(timerRef.current); if(mediaRecRef.current && mediaRecRef.current.state==='recording') mediaRecRef.current.stop(); }; },[]);
-
-  const attachFile = (file) => {
-    if(!file) return;
-    setMediaFile(file);
-    setMediaPreview(URL.createObjectURL(file));
-    if(file.type.startsWith('image/')) setMediaType('image');
-    else if(file.type.startsWith('video/')) setMediaType('video');
-    else if(file.type.startsWith('audio/')) setMediaType('audio');
-  };
-
+  const attachFile = (file) => { if(!file)return; setMediaFile(file); setMediaPreview(URL.createObjectURL(file)); if(file.type.startsWith('image/'))setMediaType('image'); else if(file.type.startsWith('video/'))setMediaType('video'); else if(file.type.startsWith('audio/'))setMediaType('audio'); };
   const removeMedia = () => { setMediaFile(null); setMediaPreview(null); setMediaType(null); };
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Detect best supported audio format
-      const mimeTypes = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4','audio/aac',''];
-      let mimeType = '';
-      for (const mt of mimeTypes) {
-        if (!mt || (typeof MediaRecorder.isTypeSupported === 'function' && MediaRecorder.isTypeSupported(mt))) { mimeType = mt; break; }
-      }
-      const options = mimeType ? { mimeType } : {};
-      const mediaRec = new MediaRecorder(stream, options);
-      const chunks = [];
-      mediaRec.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
-      mediaRec.onstop = () => {
-        stream.getTracks().forEach(t => t.stop());
-        const actualMime = mediaRec.mimeType || mimeType || 'audio/webm';
-        const ext = actualMime.includes('mp4') ? 'mp4' : actualMime.includes('ogg') ? 'ogg' : 'webm';
-        const blob = new Blob(chunks, { type: actualMime });
-        const file = new File([blob], `recording.${ext}`, { type: actualMime });
-        attachFile(file);
-      };
-      mediaRec.onerror = () => {
-        stream.getTracks().forEach(t => t.stop());
-        setRecording(false);
-        if(timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-        alert('Recording failed. Please try again.');
-      };
-      mediaRecRef.current = mediaRec;
-      mediaRec.start(1000); // collect in 1s chunks for reliability
-      setRecording(true);
-      setRecSeconds(0);
-      timerRef.current = setInterval(() => setRecSeconds(s => s + 1), 1000);
-    } catch(err) {
-      alert('Could not access microphone. Please allow microphone access.');
-    }
-  };
-
-  const stopRecording = () => {
-    if(mediaRecRef.current && mediaRecRef.current.state === 'recording') {
-      mediaRecRef.current.stop();
-    }
-    setRecording(false);
-    if(timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-  };
-
-  const handleSave = async () => {
-    if(!content && !mediaFile) return;
-    setSaving(true);
-    try {
-      let media_base64=null, media_mime=null;
-      if(mediaFile) { media_base64 = await fileToBase64(mediaFile); media_mime = mediaFile.type; }
-      // Determine entry_type for DB: if has media but type is 'text', store media-specific type
-      let entryType = type;
-      if(type === 'text' && mediaFile && !content.trim()) {
-        if(mediaType === 'image') entryType = 'image';
-        else if(mediaType === 'video') entryType = 'video';
-        else if(mediaType === 'audio') entryType = 'voice';
-      }
-      await onSave({entry_type: entryType, content, media_base64, media_mime, mood: mood||null, is_completed: false, entry_date: date});
-      onCancel();
-    } catch(err){ alert('Failed: '+err.message); } finally { setSaving(false); }
-  };
-
-  const isNote = type === 'text' || type === 'gratitude';
-  const placeholders = { text: "What's on your mind today?", task: "What do you want to get done?", gratitude: "What made you smile today?" };
+  const openCam = async (mode, facing) => { setShowPicker(null); setShowCamera(mode); setCamFacing(facing||'user'); try { const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing||'user'},audio:mode==='video'}); camStreamRef.current=stream; setTimeout(()=>{if(camVideoRef.current){camVideoRef.current.srcObject=stream;camVideoRef.current.play().catch(()=>{});}},50); } catch(err){alert('Could not access camera.');setShowCamera(null);} };
+  const closeCam = () => { if(camStreamRef.current){camStreamRef.current.getTracks().forEach(t=>t.stop());camStreamRef.current=null;} setShowCamera(null);setVidRecording(false); if(vidTimerRef.current){clearInterval(vidTimerRef.current);vidTimerRef.current=null;} };
+  const switchCam = async () => { const nf=camFacing==='user'?'environment':'user'; if(camStreamRef.current)camStreamRef.current.getTracks().forEach(t=>t.stop()); setCamFacing(nf); try{const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:nf},audio:showCamera==='video'});camStreamRef.current=stream;if(camVideoRef.current){camVideoRef.current.srcObject=stream;camVideoRef.current.play().catch(()=>{});}}catch(err){} };
+  const snapPhoto = () => { const v=camVideoRef.current;if(!v)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);c.toBlob(blob=>{attachFile(new File([blob],'photo.jpg',{type:'image/jpeg'}));closeCam();},'image/jpeg',0.92); };
+  const startVidRec = () => { const stream=camStreamRef.current;if(!stream)return;const mts=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm','video/mp4',''];let mt='';for(const m of mts){if(!m||MediaRecorder.isTypeSupported(m)){mt=m;break;}}const rec=new MediaRecorder(stream,mt?{mimeType:mt}:{});const chunks=[];rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};rec.onstop=()=>{const mime=rec.mimeType||mt||'video/webm';const ext=mime.includes('mp4')?'mp4':'webm';attachFile(new File([new Blob(chunks,{type:mime})],`video.${ext}`,{type:mime}));closeCam();};vidRecRef.current=rec;rec.start(1000);setVidRecording(true);setVidSeconds(0);vidTimerRef.current=setInterval(()=>setVidSeconds(s=>s+1),1000); };
+  const stopVidRec = () => { if(vidRecRef.current&&vidRecRef.current.state==='recording')vidRecRef.current.stop();setVidRecording(false);if(vidTimerRef.current){clearInterval(vidTimerRef.current);vidTimerRef.current=null;} };
+  const startRecording = async () => { try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});const mts=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4','audio/aac',''];let mt='';for(const m of mts){if(!m||(typeof MediaRecorder.isTypeSupported==='function'&&MediaRecorder.isTypeSupported(m))){mt=m;break;}}const rec=new MediaRecorder(stream,mt?{mimeType:mt}:{});const chunks=[];rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};rec.onstop=()=>{stream.getTracks().forEach(t=>t.stop());const mime=rec.mimeType||mt||'audio/webm';const ext=mime.includes('mp4')?'mp4':mime.includes('ogg')?'ogg':'webm';attachFile(new File([new Blob(chunks,{type:mime})],`recording.${ext}`,{type:mime}));};rec.onerror=()=>{stream.getTracks().forEach(t=>t.stop());setRecording(false);if(timerRef.current){clearInterval(timerRef.current);timerRef.current=null;}alert('Recording failed.');};mediaRecRef.current=rec;rec.start(1000);setRecording(true);setRecSeconds(0);timerRef.current=setInterval(()=>setRecSeconds(s=>s+1),1000);}catch(err){alert('Could not access microphone.');} };
+  const stopRecording = () => { if(mediaRecRef.current&&mediaRecRef.current.state==='recording')mediaRecRef.current.stop();setRecording(false);if(timerRef.current){clearInterval(timerRef.current);timerRef.current=null;} };
+  const handleSave = async () => { if(!content&&!mediaFile)return;setSaving(true);try{let media_base64=null,media_mime=null;if(mediaFile){media_base64=await fileToBase64(mediaFile);media_mime=mediaFile.type;}let entryType=type;if(type==='text'&&mediaFile&&!content.trim()){if(mediaType==='image')entryType='image';else if(mediaType==='video')entryType='video';else if(mediaType==='audio')entryType='voice';}await onSave({entry_type:entryType,content,media_base64,media_mime,mood:mood||null,is_completed:false,entry_date:date});onCancel();}catch(err){alert('Failed: '+err.message);}finally{setSaving(false);} };
+  const isNote = type==='text'||type==='gratitude';
+  const placeholders = {text:"What's on your mind today?",task:"What do you want to get done?",gratitude:"What made you smile today?"};
 
   return (<div className="entry-form-card">
-    <div className="entry-form-header">
-      <div className="entry-form-type">{typeInfo.icon} {type==='gratitude'?'Grateful for...':`New ${typeInfo.label}`}</div>
-      <button className="btn-cancel" onClick={onCancel}>×</button>
-    </div>
-    <textarea ref={textRef} value={content} onChange={e=>setContent(e.target.value)} placeholder={placeholders[type]||"Write something..."} rows={isNote ? 5 : 2}/>
-
-    {/* Media preview */}
-    {mediaPreview && (
-      <div className="media-preview">
-        {mediaType==='image' && <img src={mediaPreview} alt="Preview"/>}
-        {mediaType==='video' && <video src={mediaPreview} controls style={{maxHeight:250}}/>}
-        {mediaType==='audio' && <audio src={mediaPreview} controls/>}
-        <button className="media-remove" onClick={removeMedia}>✕</button>
-      </div>
-    )}
-
-    {/* Media toolbar for Note and Gratitude */}
-    {isNote && !mediaFile && (
-      <div className="media-toolbar">
-        <label>
-          <span>📷</span> Photo
-          <input type="file" ref={imgRef} accept="image/*" onChange={e=>attachFile(e.target.files[0])}/>
-        </label>
-        <label>
-          <span>🎬</span> Video
-          <input type="file" ref={vidRef} accept="video/*" onChange={e=>attachFile(e.target.files[0])}/>
-        </label>
-        {!recording ? (
-          <button onClick={startRecording}><span>🎤</span> Record</button>
-        ) : (
-          <button className="rec-btn recording" onClick={stopRecording}>
-            <span>⏹</span> Stop <span className="rec-timer">{fmtSec(recSeconds)}</span>
-          </button>
-        )}
-      </div>
-    )}
-
-    {/* Mood selector */}
-    {isNote && (<>
-      <div className="mood-label">How are you feeling?</div>
-      <div className="mood-selector">{MOODS.map(m=><button key={m} className={`mood-option ${mood===m?'selected':''}`} onClick={()=>setMood(mood===m?'':m)} type="button">{m}</button>)}</div>
-    </>)}
-
+    <div className="entry-form-header"><div className="entry-form-type">{typeInfo.icon} {type==='gratitude'?'Grateful for...':`New ${typeInfo.label}`}</div><button className="btn-cancel" onClick={onCancel}>×</button></div>
+    <textarea ref={textRef} value={content} onChange={e=>setContent(e.target.value)} placeholder={placeholders[type]||"Write something..."} rows={isNote?5:2}/>
+    <input type="file" ref={galleryRef} style={{display:'none'}} onChange={e=>{attachFile(e.target.files[0]);e.target.value='';}}/>
+    {mediaPreview&&(<div className="media-preview">{mediaType==='image'&&<img src={mediaPreview} alt="Preview"/>}{mediaType==='video'&&<video src={mediaPreview} controls style={{maxHeight:250}}/>}{mediaType==='audio'&&<audio src={mediaPreview} controls/>}<button className="media-remove" onClick={removeMedia}>✕</button></div>)}
+    {isNote&&!mediaFile&&(<div className="media-toolbar"><button onClick={()=>setShowPicker('photo')}><span>📷</span> Photo</button><button onClick={()=>setShowPicker('video')}><span>🎬</span> Video</button>{!recording?<button onClick={startRecording}><span>🎤</span> Record</button>:<button className="rec-btn recording" onClick={stopRecording}><span>⏹</span> Stop <span className="rec-timer">{fmtSec(recSeconds)}</span></button>}</div>)}
+    {showPicker&&(<div className="media-picker-overlay" onClick={()=>setShowPicker(null)}><div className="media-picker-popup" onClick={e=>e.stopPropagation()}><h3>{showPicker==='photo'?'📷 Add Photo':'🎬 Add Video'}</h3><div className="media-picker-options"><button onClick={()=>openCam(showPicker,'user')}><span className="pick-icon">{showPicker==='photo'?'📸':'🎥'}</span> Camera</button><label><span className="pick-icon">🖼️</span> Gallery<input type="file" accept={showPicker==='photo'?'image/*':'video/*'} onChange={e=>{attachFile(e.target.files[0]);setShowPicker(null);e.target.value='';}}/></label></div><button className="media-picker-cancel" onClick={()=>setShowPicker(null)}>Cancel</button></div></div>)}
+    {showCamera&&(<div className="camera-view">{vidRecording&&<div className="camera-timer">⏺ {fmtSec(vidSeconds)}</div>}<video ref={camVideoRef} className="camera-video" autoPlay playsInline muted/><div className="camera-controls"><button className="camera-close" onClick={closeCam}>✕</button>{showCamera==='photo'?<button className="camera-snap" onClick={snapPhoto}><div className="camera-snap-inner"/></button>:!vidRecording?<button className="camera-snap" onClick={startVidRec}><div className="camera-snap-inner" style={{background:'var(--coral)'}}/></button>:<button className="camera-snap recording-vid" onClick={stopVidRec}><div className="camera-snap-inner"/></button>}<button className="camera-switch" onClick={switchCam}>🔄</button></div></div>)}
+    {isNote&&(<><div className="mood-label">How are you feeling?</div><div className="mood-selector">{MOODS.map(m=><button key={m} className={`mood-option ${mood===m?'selected':''}`} onClick={()=>setMood(mood===m?'':m)} type="button">{m}</button>)}</div></>)}
     <button className="btn-save" onClick={handleSave} disabled={saving||(!content&&!mediaFile)}>{saving?'Saving...':'Save'}</button>
   </div>);
 }
 
 function EntryCard({entry, onToggleTask, onDelete}) {
-  const renderMedia=()=>{if(!entry.media_base64||!entry.media_mime) return null; const src=`data:${entry.media_mime};base64,${entry.media_base64}`;
-    return (<div>{entry.media_mime.startsWith('image/')&&<img src={src} alt=""/>}{entry.media_mime.startsWith('audio/')&&<audio src={src} controls/>}{entry.media_mime.startsWith('video/')&&<video src={src} controls style={{maxHeight:300}}/>}</div>);};
-  const typeInfo = ALL_TYPES.find(t=>t.type===entry.entry_type) || {icon:'✏️',label:'note'};
+  const renderMedia=()=>{if(!entry.media_base64||!entry.media_mime)return null;const src=`data:${entry.media_mime};base64,${entry.media_base64}`;return(<div>{entry.media_mime.startsWith('image/')&&<img src={src} alt=""/>}{entry.media_mime.startsWith('audio/')&&<audio src={src} controls/>}{entry.media_mime.startsWith('video/')&&<video src={src} controls style={{maxHeight:300}}/>}</div>);};
+  const typeInfo=ALL_TYPES.find(t=>t.type===entry.entry_type)||{icon:'✏️',label:'note'};
   return (<div className="entry-card"><div className={`entry-dot ${entry.entry_type}`}/>
     <div className="entry-header"><span className={`entry-type-badge ${entry.entry_type}`}>{typeInfo.icon} {typeInfo.label}</span><span className="entry-time">{formatTime(entry.created_at)}</span></div>
     {entry.entry_type==='task'?(<div className="task-check"><button className={`task-checkbox ${entry.is_completed?'done':''}`} onClick={()=>onToggleTask(entry.id,!entry.is_completed)}>{entry.is_completed?'✓':''}</button><span className={`entry-content task-text ${entry.is_completed?'done':''}`}>{entry.content}</span></div>)
@@ -475,7 +480,7 @@ function OnThisDay() {
 function App() {
   const [user,setUser]=useState(()=>{const s=localStorage.getItem('journal_user');return s?JSON.parse(s):null;});
   const [view,setView]=useState('today'); const [sidebarOpen,setSidebarOpen]=useState(false);
-  if(!user||!API.hasToken()) return <AuthPage onLogin={u=>setUser(u)}/>;
+  if(!user||!API.hasToken()) return (<><AuthPage onLogin={u=>setUser(u)}/><InstallPrompt/></>);
   const nav=[{id:'today',icon:'☀️',label:'Today'},{id:'calendar',icon:'📅',label:'Calendar'},{id:'onthisday',icon:'🕰️',label:'Memories'}];
   return (<div className="app-layout">
     <div className="mobile-header"><div className="sidebar-brand">Journal<span>.</span></div><button className="hamburger" onClick={()=>setSidebarOpen(!sidebarOpen)}>{sidebarOpen?'✕':'☰'}</button></div>
@@ -486,6 +491,7 @@ function App() {
         <button className="btn-logout" onClick={()=>{API.clearToken();setUser(null);}}>Sign out</button></div>
     </aside>
     <main className="main-content">{view==='today'&&<TodayView userName={user.name}/>}{view==='calendar'&&<CalendarView/>}{view==='onthisday'&&<OnThisDay/>}</main>
+    <InstallPrompt/>
   </div>);
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);

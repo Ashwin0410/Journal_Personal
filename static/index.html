@@ -288,17 +288,32 @@ function EntryForm({type, date, onSave, onCancel}) {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRec = new MediaRecorder(stream);
+      // Detect best supported audio format
+      const mimeTypes = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4','audio/aac',''];
+      let mimeType = '';
+      for (const mt of mimeTypes) {
+        if (!mt || (typeof MediaRecorder.isTypeSupported === 'function' && MediaRecorder.isTypeSupported(mt))) { mimeType = mt; break; }
+      }
+      const options = mimeType ? { mimeType } : {};
+      const mediaRec = new MediaRecorder(stream, options);
       const chunks = [];
-      mediaRec.ondataavailable = e => chunks.push(e.data);
+      mediaRec.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
       mediaRec.onstop = () => {
         stream.getTracks().forEach(t => t.stop());
-        const blob = new Blob(chunks, { type: 'audio/webm' });
-        const file = new File([blob], 'recording.webm', { type: 'audio/webm' });
+        const actualMime = mediaRec.mimeType || mimeType || 'audio/webm';
+        const ext = actualMime.includes('mp4') ? 'mp4' : actualMime.includes('ogg') ? 'ogg' : 'webm';
+        const blob = new Blob(chunks, { type: actualMime });
+        const file = new File([blob], `recording.${ext}`, { type: actualMime });
         attachFile(file);
       };
+      mediaRec.onerror = () => {
+        stream.getTracks().forEach(t => t.stop());
+        setRecording(false);
+        if(timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+        alert('Recording failed. Please try again.');
+      };
       mediaRecRef.current = mediaRec;
-      mediaRec.start();
+      mediaRec.start(1000); // collect in 1s chunks for reliability
       setRecording(true);
       setRecSeconds(0);
       timerRef.current = setInterval(() => setRecSeconds(s => s + 1), 1000);
@@ -358,11 +373,11 @@ function EntryForm({type, date, onSave, onCancel}) {
       <div className="media-toolbar">
         <label>
           <span>📷</span> Photo
-          <input type="file" ref={imgRef} accept="image/*" capture="environment" onChange={e=>attachFile(e.target.files[0])}/>
+          <input type="file" ref={imgRef} accept="image/*" onChange={e=>attachFile(e.target.files[0])}/>
         </label>
         <label>
           <span>🎬</span> Video
-          <input type="file" ref={vidRef} accept="video/*" capture="environment" onChange={e=>attachFile(e.target.files[0])}/>
+          <input type="file" ref={vidRef} accept="video/*" onChange={e=>attachFile(e.target.files[0])}/>
         </label>
         {!recording ? (
           <button onClick={startRecording}><span>🎤</span> Record</button>
